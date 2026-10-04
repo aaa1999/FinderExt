@@ -65,5 +65,11 @@ pkill -x FinderExt; rm -rf /Applications/FinderExt.app
 ## 开发
 
 - 工程由 `project.yml`（XcodeGen）生成，`FinderExt.xcodeproj` 不入库，改完配置执行 `xcodegen generate`
-- 两个 target 均为本地自用配置：非沙盒、ad-hoc 签名，无需开发者账号
+- 签名默认 ad-hoc（开箱即用）。但 TCC 授权（「控制 Finder」等）绑定签名身份，ad-hoc 每次构建指纹都变，授权会反复失效弹窗——**日常自用建议用自己的 Apple Development 证书**，构建前设置：
+  ```bash
+  export FINDEREXT_SIGN_IDENTITY='Apple Development: you@example.com (XXXXXXXXXX)'
+  export FINDEREXT_TEAM_ID='XXXXXXXXXX'
+  ./scripts/build-and-install.sh
+  ```
+  证书名可在 钥匙串访问 或 `security find-identity -v -p codesigning` 中查看
 - 源码：`App/`（宿主）、`Extension/`（Finder 扩展）

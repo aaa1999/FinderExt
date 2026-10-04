@@ -155,7 +155,8 @@ enum FileCreation {
             if (exists file "\(fileName)" of targetFolder) then
                 return "EXISTS"
             end if
-            make new file at targetFolder with properties {name:"\(fileName)"}
+            set newFile to make new file at targetFolder with properties {name:"\(fileName)"}
+            set extension hidden of newFile to false
         end tell
         """
         guard let appleScript = NSAppleScript(source: script) else { return nil }

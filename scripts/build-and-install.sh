@@ -6,11 +6,25 @@ cd "$(dirname "$0")/.."
 echo "==> 生成 Xcode 工程"
 xcodegen generate
 
+# 签名：默认 ad-hoc（开箱即用）；日常自用建议注入自己的 Apple Development 证书，
+# TCC 授权（「控制 Finder」等）绑定签名身份，ad-hoc 每次构建指纹都变会导致授权失效：
+#   export FINDEREXT_SIGN_IDENTITY='Apple Development: you@example.com (XXXXXXXXXX)'
+#   export FINDEREXT_TEAM_ID='XXXXXXXXXX'
+# 证书名可用 `security find-identity -v -p codesigning` 查看
+SIGN_ARGS=()
+if [ -n "${FINDEREXT_SIGN_IDENTITY:-}" ] && [ -n "${FINDEREXT_TEAM_ID:-}" ]; then
+  SIGN_ARGS+=(
+    CODE_SIGN_IDENTITY="$FINDEREXT_SIGN_IDENTITY"
+    DEVELOPMENT_TEAM="$FINDEREXT_TEAM_ID"
+  )
+fi
+
 echo "==> 编译 Release"
 xcodebuild -project FinderExt.xcodeproj \
   -scheme FinderExt \
   -configuration Release \
   -derivedDataPath build/DerivedData \
+  "${SIGN_ARGS[@]}" \
   build
 
 APP="build/DerivedData/Build/Products/Release/FinderExt.app"
