@@ -18,6 +18,12 @@
 - 宿主 App 常驻菜单栏（不占 Dock），通过自定义 URL Scheme 接收命令；未运行时会被系统自动拉起
 - 宿主默认注册为登录项（可在菜单栏图标中关闭）
 
+## 环境要求
+
+- macOS 14+
+- Xcode（含命令行构建工具）
+- [XcodeGen](https://github.com/yonaskolb/XcodeGen)：`brew install xcodegen`
+
 ## 安装
 
 ```bash
@@ -73,3 +79,7 @@ pkill -x FinderExt; rm -rf /Applications/FinderExt.app
   ```
   证书名可在 钥匙串访问 或 `security find-identity -v -p codesigning` 中查看
 - 源码：`App/`（宿主）、`Extension/`（Finder 扩展）
+
+## 许可
+
+[MIT](LICENSE)
