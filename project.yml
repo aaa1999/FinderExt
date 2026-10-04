@@ -1,0 +1,76 @@
+name: FinderExt
+options:
+  bundleIdPrefix: com.lwc
+  deploymentTarget:
+    macOS: "14.0"
+  createIntermediateGroups: true
+
+settings:
+  base:
+    SWIFT_VERSION: "5"
+    CODE_SIGN_STYLE: Manual
+    CODE_SIGN_IDENTITY: "-"
+    DEVELOPMENT_TEAM: ""
+    ENABLE_HARDENED_RUNTIME: "NO"
+
+targets:
+  FinderExt:
+    type: application
+    platform: macOS
+    sources:
+      - App
+    dependencies:
+      - target: FinderExtExtension
+        embed: true
+        codeSign: true
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleDisplayName: FinderExt
+        CFBundleName: FinderExt
+        CFBundleShortVersionString: "1.0"
+        CFBundleVersion: "1"
+        LSUIElement: true
+        NSAppleEventsUsageDescription: FinderExt 在创建文件后需要在 Finder 中定位并进入重命名，以及打开终端窗口。
+        CFBundleURLTypes:
+          - CFBundleURLName: com.lwc.finderext
+            CFBundleURLSchemes:
+              - finderext
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.lwc.finderext
+        PRODUCT_NAME: FinderExt
+
+  FinderExtExtension:
+    type: app-extension
+    platform: macOS
+    sources:
+      - Extension
+    entitlements:
+      path: Extension/FinderExtExtension.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+    info:
+      path: Extension/Info.plist
+      properties:
+        CFBundleDisplayName: FinderExt
+        CFBundleName: FinderExtExtension
+        CFBundleShortVersionString: "1.0"
+        CFBundleVersion: "1"
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.FinderSync
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).FinderSync
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.lwc.finderext.extension
+        PRODUCT_NAME: FinderExtExtension
+
+schemes:
+  FinderExt:
+    build:
+      targets:
+        FinderExt: all
+    run:
+      config: Debug
+    archive:
+      config: Release
