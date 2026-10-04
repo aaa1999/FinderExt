@@ -24,7 +24,7 @@ xcodebuild -project FinderExt.xcodeproj \
   -scheme FinderExt \
   -configuration Release \
   -derivedDataPath build/DerivedData \
-  "${SIGN_ARGS[@]}" \
+  ${SIGN_ARGS[@]+"${SIGN_ARGS[@]}"} \
   build
 
 APP="build/DerivedData/Build/Products/Release/FinderExt.app"
